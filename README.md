@@ -44,7 +44,7 @@ pip install -r requirements.txt
 ### Start PostgreSQL Docker
 
 ```bash
-docker compose up -d
+docker compose up -d 
 ```
 
 ### Run FastAPI

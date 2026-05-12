@@ -13,6 +13,8 @@ from app.schemas.user_schema import UserLogin
 from app.repositories.user_repository import create_user
 from app.repositories.user_repository import get_user_by_email
 
+from app.auth.dependencies import get_current_user
+
 from app.auth.security import (
     verify_password,
     create_access_token
@@ -80,4 +82,13 @@ def login(
     return {
         "access_token": access_token,
         "token_type": "bearer"
+    }
+
+@app.get("/me")
+def read_me(current_user = Depends(get_current_user)):
+
+    return {
+        "id": current_user.id,
+        "username": current_user.username,
+        "email": current_user.email
     }
