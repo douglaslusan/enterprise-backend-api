@@ -6,12 +6,11 @@ from jose import JWTError
 from passlib.context import CryptContext
 
 
-SECRET_KEY = "MY_SUPER_SECRET_KEY"
-
-ALGORITHM = "HS256"
-
-ACCESS_TOKEN_EXPIRE_MINUTES = 60
-
+from app.config import (
+    SECRET_KEY,
+    ALGORITHM,
+    ACCESS_TOKEN_EXPIRE_MINUTES
+)
 
 pwd_context = CryptContext(
     schemes=["bcrypt"],
