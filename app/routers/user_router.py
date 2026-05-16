@@ -45,8 +45,10 @@ def get_db():
 
 
 @router.post("/", response_model=UserResponse)
-def create_new_user(user: UserCreate, db: Session = Depends(get_db)):
-
+def create_new_user(
+    user: UserCreate,
+    db: Session = Depends(get_db)
+):
     try:
         return create_user_service(db, user)
 
@@ -55,6 +57,8 @@ def create_new_user(user: UserCreate, db: Session = Depends(get_db)):
             status_code=400,
             detail=str(e)
         )
+
+
 
 @router.post("/login")
 def login(

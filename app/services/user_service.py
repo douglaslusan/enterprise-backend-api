@@ -1,5 +1,7 @@
 from sqlalchemy.orm import Session
 
+from app.auth.security import hash_password
+
 from app.repositories.user_repository import (
     create_user,
     get_user_by_email
@@ -22,20 +24,25 @@ from app.repositories.user_repository import (
 
 
 def create_user_service(db, user):
-    existing_user = get_user_by_email(db, user.email)
+
+    existing_user = get_user_by_email(
+        db,
+        user.email
+    )
 
     if existing_user:
         raise UserAlreadyExistsException(
             "User already exists"
         )
 
-    return create_user(db, user)
+    hashed_password = hash_password(
+        user.password
+    )
+
+    user.password = hashed_password
 
     return create_user(db, user)
 
-
-
-    return create_user(db, user)
 
 def get_all_users_service(db):
     return get_users(db)
@@ -65,6 +72,8 @@ def update_user_service(db, user_id, user_data):
         user.email = user_data.email
 
     if user_data.password:
-        user.password = user_data.password
+        user.password = hash_password(
+            user_data.password
+        )
 
     return update_user(db, user)

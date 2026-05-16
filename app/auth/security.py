@@ -6,11 +6,7 @@ from jose import JWTError
 from passlib.context import CryptContext
 
 
-from app.config import (
-    SECRET_KEY,
-    ALGORITHM,
-    ACCESS_TOKEN_EXPIRE_MINUTES
-)
+from app.config import settings
 
 pwd_context = CryptContext(
     schemes=["bcrypt"],
@@ -32,15 +28,15 @@ def create_access_token(data: dict):
     to_encode = data.copy()
 
     expire = datetime.now(UTC) + timedelta(
-        minutes=ACCESS_TOKEN_EXPIRE_MINUTES
+        minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
     )
 
     to_encode.update({"exp": expire})
 
     encoded_jwt = jwt.encode(
         to_encode,
-        SECRET_KEY,
-        algorithm=ALGORITHM
+        settings.SECRET_KEY,
+        algorithm=settings.ALGORITHM
     )
 
     return encoded_jwt
@@ -51,8 +47,8 @@ def verify_token(token: str):
 
         payload = jwt.decode(
             token,
-            SECRET_KEY,
-            algorithms=[ALGORITHM]
+            settings.SECRET_KEY,
+            algorithms=[settings.ALGORITHM]
         )
 
         email = payload.get("sub")
