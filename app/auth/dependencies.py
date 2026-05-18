@@ -14,7 +14,7 @@ from app.auth.security import verify_token
 
 
 oauth2_scheme = OAuth2PasswordBearer(
-    tokenUrl="login"
+    tokenUrl="users/login"
 )
 
 

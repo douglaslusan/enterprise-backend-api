@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 
 from app.auth.security import hash_password
+from app.auth.security import verify_password
 
 from app.repositories.user_repository import (
     create_user,
@@ -77,3 +78,14 @@ def update_user_service(db, user_id, user_data):
         )
 
     return update_user(db, user)
+
+def authenticate_user(db, email, password):
+    user = get_user_by_email(db, email)
+
+    if not user:
+        return None
+
+    if not verify_password(password, user.password):
+        return None
+
+    return user

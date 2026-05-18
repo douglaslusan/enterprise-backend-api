@@ -1,6 +1,14 @@
 from fastapi import APIRouter, Depends
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi import HTTPException
+
+
+from app.auth.security import create_access_token
+
+from app.services.user_service import (
+    authenticate_user
+)
+
 from app.exceptions.user_exceptions import (
     UserAlreadyExistsException
 )
@@ -25,8 +33,6 @@ from app.services.user_service import (
 
 from app.auth.dependencies import get_current_user
 from app.auth.security import create_access_token
-
-from app.repositories.user_repository import authenticate_user
 
 from fastapi import HTTPException
 
@@ -67,12 +73,15 @@ def login(
 ):
     user = authenticate_user(
         db,
-        form_data.username,
+        form_data.username,  # aqui vem o email
         form_data.password
     )
 
     if not user:
-        return {"error": "Invalid credentials"}
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid credentials"
+        )
 
     access_token = create_access_token(
         data={"sub": user.email}
