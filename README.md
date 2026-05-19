@@ -58,3 +58,14 @@ uvicorn app.main:app --reload
 ```text
 http://127.0.0.1:8000/docs
 ```
+
+## Environment Variables
+
+Create a `.env` file based on `.env.example`.
+
+Example:
+
+DATABASE_URL=postgresql://admin:admin123@db:5432/enterprise_db
+SECRET_KEY=your_secret_key_here
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=30
