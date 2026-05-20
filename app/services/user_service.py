@@ -36,11 +36,19 @@ def create_user_service(db, user):
             "User already exists"
         )
 
-    hashed_password = hash_password(
-        user.password
-    )
+    def create_user_service(db, user):
 
-    user.password = hashed_password
+        existing_user = get_user_by_email(
+            db,
+            user.email
+        )
+
+        if existing_user:
+            raise UserAlreadyExistsException(
+                "User already exists"
+            )
+
+        return create_user(db, user)
 
     return create_user(db, user)
 

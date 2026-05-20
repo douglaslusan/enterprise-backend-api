@@ -18,7 +18,7 @@ from app.services.user_service import (
     authenticate_user
 )
 
-from app.auth.security import create_access_token
+from app.auth.security import create_access_token, create_refresh_token, verify_token
 from app.auth.dependencies import get_current_user
 from app.auth.permissions import require_admin
 
@@ -82,8 +82,13 @@ def login(
         data={"sub": user.email}
     )
 
+    refresh_token = create_refresh_token(
+        data={"sub": user.email}
+    )
+
     return {
         "access_token": access_token,
+        "refresh_token": refresh_token,
         "token_type": "bearer"
     }
 
@@ -171,3 +176,24 @@ def delete_user(
         )
 
     return result
+
+@router.post("/refresh")
+def refresh_token(token: str):
+
+    email = verify_token(token)
+
+    if not email:
+
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid refresh token"
+        )
+
+    new_access_token = create_access_token(
+        data={"sub": email}
+    )
+
+    return {
+        "access_token": new_access_token,
+        "token_type": "bearer"
+    }
