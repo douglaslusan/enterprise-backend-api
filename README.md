@@ -65,7 +65,7 @@ Create a `.env` file based on `.env.example`.
 
 Example:
 
-DATABASE_URL=postgresql://admin:admin123@db:5432/enterprise_db
+DATABASE_URL=postgresql://admin:admin123@localhost:5432/enterprise_db
 SECRET_KEY=your_secret_key_here
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=30
