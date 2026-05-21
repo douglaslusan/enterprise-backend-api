@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta, UTC
+from datetime import datetime, timedelta, UTC, timezone
 
 from jose import jwt
 from jose import JWTError
@@ -7,6 +7,8 @@ from passlib.context import CryptContext
 
 
 from app.config import settings
+
+REFRESH_TOKEN_EXPIRE_DAYS = 7
 
 pwd_context = CryptContext(
     schemes=["bcrypt"],
@@ -67,13 +69,12 @@ def create_refresh_token(data: dict):
 
     to_encode = data.copy()
 
-    expire = datetime.now(UTC) + timedelta(
-        days=settings.REFRESH_TOKEN_EXPIRE_DAYS
+    expire = datetime.now(timezone.utc) + timedelta(
+        days=REFRESH_TOKEN_EXPIRE_DAYS
     )
 
     to_encode.update({
-        "exp": expire,
-        "type": "refresh"
+        "exp": expire
     })
 
     encoded_jwt = jwt.encode(

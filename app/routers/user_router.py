@@ -18,7 +18,11 @@ from app.services.user_service import (
     authenticate_user
 )
 
-from app.auth.security import create_access_token, create_refresh_token, verify_token
+from app.auth.security import (
+    create_access_token,
+    create_refresh_token,
+    verify_token
+)
 from app.auth.dependencies import get_current_user
 from app.auth.permissions import require_admin
 
@@ -183,7 +187,6 @@ def refresh_token(token: str):
     email = verify_token(token)
 
     if not email:
-
         raise HTTPException(
             status_code=401,
             detail="Invalid refresh token"
