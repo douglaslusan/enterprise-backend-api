@@ -182,9 +182,9 @@ def delete_user(
     return result
 
 @router.post("/refresh")
-def refresh_token(token: str):
+def refresh_token(refresh_token: str):
 
-    email = verify_token(token)
+    email = verify_token(refresh_token)
 
     if not email:
         raise HTTPException(
